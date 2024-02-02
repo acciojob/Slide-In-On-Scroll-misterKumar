@@ -57,7 +57,26 @@
         if (callNow) func.apply(context, args);
       };
     }
+function activateImage(image) {
+  const slideInAt = (window.scrollY + window.innerHeight) - image.height / 2;
+  const imageRight = image.offsetLeft + image.width;
+  const isHalfShown = slideInAt > image.offsetTop;
+  const isNotScrolledPast = window.scrollY < imageRight;
+  if (isHalfShown && isNotScrolledPast) {
+    image.classList.add('active');
+  } else {
+    image.classList.remove('active');
+  }
+}
 
+const slideRightImages = document.querySelectorAll('.align-right slide-in');
+const slideLeftImages = document.querySelectorAll('.align-left slide-in');
+	  function checkSlide() {
+  slideRightImages.forEach(slideRightImage => activateImage(slideRightImage));
+  slideLeftImages.forEach(slideLeftImage => activateImage(slideLeftImage));
+}
+
+window.addEventListener('scroll', debounce(checkSlide));
   </script>
 
   <style>
