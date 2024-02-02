@@ -43,40 +43,60 @@
   </div>
 
   <script>
-    function debounce(func, wait = 20, immediate = true) {
-      var timeout;
-      return function() {
-        var context = this, args = arguments;
-        var later = function() {
-          timeout = null;
-          if (!immediate) func.apply(context, args);
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-      };
+	 //  function scrolled() {
+	 //  	const images = document.querySelectorAll('img');
+		// images.forEach(image =>{
+		// 	image.classList.add('active');
+		// })
+	 //  }
+
+	 //  debounce(scrolled,20,true)
+  //   function debounce(func, wait = 20, immediate = true) {
+  //     var timeout;
+  //     return function() {
+  //       var context = this, args = arguments;
+  //       var later = function() {
+  //         timeout = null;
+  //         if (!immediate) func.apply(context, args);
+  //       };
+  //       var callNow = immediate && !timeout;
+  //       clearTimeout(timeout);
+  //       timeout = setTimeout(later, wait);
+  //       if (callNow) func.apply(context, args);
+  //     };
+  //   }
+	  function debounce(func, wait = 20, immediate = true) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
+const images = document.querySelectorAll('img');
+function checkSlide(ev) {
+  images.forEach(img => {
+    //image's halfway point
+    const slideInAt = (window.scrollY + window.innerHeight) - img.height / 2;
+    //image's bottom
+    const imgBottom = img.offsetTop + img.height;
+    const isHalfShown = slideInAt > img.offsetTop;
+    const isNotScolledPast = window.scrollY < imgBottom;
+    if(isHalfShown && isNotScolledPast) {
+      img.classList.add('active');
+    } else {
+      img.classList.remove('active');
     }
-function activateImage(image) {
-  const slideInAt = (window.scrollY + window.innerHeight) - image.height / 2;
-  const imageRight = image.offsetLeft + image.width;
-  const isHalfShown = slideInAt > image.offsetTop;
-  const isNotScrolledPast = window.scrollY < imageRight;
-  if (isHalfShown && isNotScrolledPast) {
-    image.classList.add('active');
-  } else {
-    image.classList.remove('active');
-  }
+  });
 }
-
-const slideRightImages = document.querySelectorAll('.align-right slide-in');
-const slideLeftImages = document.querySelectorAll('.align-left slide-in');
-	  function checkSlide() {
-  slideRightImages.forEach(slideRightImage => activateImage(slideRightImage));
-  slideLeftImages.forEach(slideLeftImage => activateImage(slideLeftImage));
-}
-
 window.addEventListener('scroll', debounce(checkSlide));
+
   </script>
 
   <style>
